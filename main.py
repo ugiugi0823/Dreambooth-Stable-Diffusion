@@ -22,7 +22,22 @@ from pytorch_lightning.utilities import rank_zero_info
 from ldm.data.base import Txt2ImgIterableBaseDataset
 from ldm.util import instantiate_from_config
 
+# -*- coding:utf-8 -*-
+def train_fin():
+    import smtplib
+    from email.mime.text import MIMEText
 
+    smtp = smtplib.SMTP('smtp.gmail.com', )
+    smtp.ehlo()      # say Hello
+    smtp.starttls()  # TLS 사용시 필요
+    smtp.login('acerghjk@gmail.com', '')
+
+    msg = MIMEText('본문 테스트 메시지')
+    msg['Subject'] = 'AI Center Dream 종료'
+    msg['To'] = 'acerghjk@naver.com'
+    smtp.sendmail('acerghjk@gmail.com', 'acerghjk@naver.com', msg.as_string())
+
+    smtp.quit()
 
 
 def load_model_from_config(config, ckpt, verbose=False):
@@ -840,7 +855,7 @@ if __name__ == "__main__":
             try:
                 print("🎧"*40)
                 trainer.fit(model, data)
-                
+                train_fin()
             except Exception:
                 melk()
                 raise
