@@ -22,6 +22,9 @@ from pytorch_lightning.utilities import rank_zero_info
 from ldm.data.base import Txt2ImgIterableBaseDataset
 from ldm.util import instantiate_from_config
 
+
+
+
 def load_model_from_config(config, ckpt, verbose=False):
     print(f"Loading model from {ckpt}")
     pl_sd = torch.load(ckpt, map_location="cpu")
@@ -502,6 +505,7 @@ class ModeSwapCallback(Callback):
             self.is_frozen = False
             trainer.optimizers = [pl_module.configure_opt_model()]
 
+
 if __name__ == "__main__":
     # custom parser to specify config files, train, test and debug mode,
     # postfix, resume.
@@ -592,7 +596,7 @@ if __name__ == "__main__":
             name = ""
 
         if opt.datadir_in_name:
-            now = os.path.basename(os.path.normpath(opt.data_root)) + now
+            now = now + "_" + os.path.basename(os.path.normpath(opt.data_root)) 
             
         nowname = now + name + opt.postfix
         logdir = os.path.join(opt.logdir, nowname)
@@ -836,6 +840,7 @@ if __name__ == "__main__":
             try:
                 print("🎧"*40)
                 trainer.fit(model, data)
+                
             except Exception:
                 melk()
                 raise
@@ -859,6 +864,3 @@ if __name__ == "__main__":
             os.rename(logdir, dst)
         if trainer.global_rank == 0:
             print(trainer.profiler.summary())
-
-
-
