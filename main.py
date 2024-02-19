@@ -1,4 +1,5 @@
 import argparse, os, sys, datetime, glob, importlib, csv
+import pytz
 import numpy as np
 import time
 import torch
@@ -542,8 +543,9 @@ if __name__ == "__main__":
     #           target: importpath
     #           params:
     #               key: value
-
-    now = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    seoul_tz = pytz.timezone("Asia/Seoul")
+    now = datetime.datetime.now(seoul_tz).strftime("%Y-%m-%dT%H-%M-%S")
+    # now = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 
     # add cwd for convenience and to make classes in this file available when
     # running as `python main.py`
@@ -762,6 +764,11 @@ if __name__ == "__main__":
         trainer_kwargs["callbacks"] = [instantiate_from_config(callbacks_cfg[k]) for k in callbacks_cfg]
         trainer_kwargs["max_steps"] = trainer_opt.max_steps
 
+        print("🎮"*40)
+        print(trainer_opt)
+        print("🎮"*40)
+        print(trainer_kwargs)
+        print("🎮"*40)
         trainer = Trainer.from_argparse_args(trainer_opt, **trainer_kwargs)
         trainer.logdir = logdir  ###
 
@@ -827,12 +834,14 @@ if __name__ == "__main__":
         # run
         if opt.train:
             try:
+                print("🎧"*40)
                 trainer.fit(model, data)
             except Exception:
                 melk()
                 raise
         if not opt.no_test and not trainer.interrupted:
-            trainer.test(model, data)
+            print("🇨🇦"*40)
+            # trainer.test(model, data)
     except Exception:
         if opt.debug and trainer.global_rank == 0:
             try:
@@ -850,3 +859,6 @@ if __name__ == "__main__":
             os.rename(logdir, dst)
         if trainer.global_rank == 0:
             print(trainer.profiler.summary())
+
+
+
