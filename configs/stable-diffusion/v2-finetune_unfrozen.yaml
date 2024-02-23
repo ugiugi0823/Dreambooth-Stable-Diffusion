@@ -106,7 +106,8 @@ data:
 lightning:
   modelcheckpoint:
     params:
-      every_n_train_steps: 500
+      every_n_epochs: 1  
+      save_top_k: 3
   callbacks:
     image_logger:
       target: main.ImageLogger
